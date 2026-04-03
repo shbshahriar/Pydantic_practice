@@ -1,9 +1,19 @@
-from pydantic import BaseModel,EmailStr,AnyUrl,Field
-from typing import List,Dict,Annotated, Optional, Any
+# ============================================================
+# FILE: 5.pydantic_Model_Validator.py
+# TOPIC: model_validator — validation that checks multiple fields together
+# ============================================================
+
+# Self is used as the return type hint for model_validator (refers to the model class itself)
+from typing_extensions import Self
+
+# model_validator runs validation on the entire model AFTER all fields are validated
+from pydantic import BaseModel, EmailStr, AnyUrl, Field, model_validator
+from typing import List, Dict, Annotated, Optional, Any
+
 class Patient(BaseModel):
     name: Annotated[str, Field(min_length=2, max_length=50, title="Patient Name", description="The name of the patient", json_schema_extra={"example": "John Doe"})]
-    
-    age: Annotated[int, Field(gt=0, lt=120, title="Patient Age", description="The age of the patient", json_schema_extra={"example": 30})]
+
+    age: Annotated[int, Field(strict=True, gt=0, lt=120, title="Patient Age", description="The age of the patient", json_schema_extra={"example": 30})]
 
     email: Annotated[EmailStr, Field(title="Patient Email", description="The email address of the patient", json_schema_extra={"example": "c7c2A@example.com"})]
 
@@ -16,6 +26,18 @@ class Patient(BaseModel):
     allergies: Annotated[List[str], Field(title="Patient Allergies", description="List of patient allergies", json_schema_extra={"example": ["penicillin", "latex"]})]
 
     contact: Annotated[Dict[str, str], Field(title="Patient Contact", description="Contact information for the patient", json_schema_extra={"example": {"email": "c7c2A@example.com", "phone": "123-456-7890"}})]
+
+    # @model_validator runs after ALL fields have been validated
+    # Unlike field_validator (single field), model_validator has access to the ENTIRE model
+    # mode="after" means 'model' is already a fully constructed Patient instance
+    @model_validator(mode="after")
+    @classmethod
+    def validate_emergency_contact(cls, model):
+        # Cross-field rule: if age > 60, the contact dict must include an 'emergency_contact' key
+        # This is only possible with model_validator because it checks two fields at once (age + contact)
+        if model.age > 60 and "emergency_contact" not in model.contact:
+            raise ValueError('Emergency contact is required for patients over 60 years old')
+        return model  # always return the model if validation passes
 
 def update_patient_info(patient: Patient):
     print("Patient information updated successfully.")
@@ -30,7 +52,7 @@ def update_patient_info(patient: Patient):
 
 patientinfo: Dict[str, Any] = {
     "name": "John Doe",
-    "age": 20,
+    "age": 20,           # age is 20 — under 60, so emergency_contact is NOT required
     "email": "c7c2A@example.com",
     "LinkedIn": "https://www.linkedin.com/in/johndoe",
     "weight": 70.5,
@@ -38,5 +60,6 @@ patientinfo: Dict[str, Any] = {
     "allergies": ["penicillin", "latex"],
     "contact": {"email": "c7c2A@example.com", "phone": "123-456-7890"}
 }
+
 patient1 = Patient(**patientinfo)
 update_patient_info(patient1)
