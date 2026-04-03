@@ -11,9 +11,12 @@ def inserted_patient_info(patient: patient):
 def update_patient_info(patient: patient):
     patient.age = 30
     print("Patient information updated successfully.")
+    print(f"Updated Patient Age: {patient.age}")
+    print(f"Patient Name: {patient.name}")
 
 patientinfo = {
     "name": "John Doe",
-    "age": 25}
+    "age": 20}
 patient1 = patient(**patientinfo)
-inserted_patient_info(patient1)
+update_patient_info(patient1)
+
