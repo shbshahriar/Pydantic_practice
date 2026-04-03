@@ -4,7 +4,7 @@
 # ============================================================
 
 # field_validator lets you write custom logic to validate a single field
-from pydantic import BaseModel, EmailStr, AnyUrl, Field, field_validator
+from pydantic import BaseModel, EmailStr, AnyUrl, Field, field_validator, ValidationError
 from typing import List, Dict, Annotated, Optional, Any
 
 class Patient(BaseModel):
@@ -72,6 +72,12 @@ patientinfo: Dict[str, Any] = {
     "contact": {"email": "c7c2A@example.com", "phone": "123-456-7890"}
 }
 
-# Pydantic runs: type checks → Field constraints → field_validators (in that order)
-patient1 = Patient(**patientinfo)
-update_patient_info(patient1)
+# try/except ValidationError — catches failures from:
+# 1. type checks  2. Field constraints (gt, lt, strict)  3. custom field_validators
+# Pydantic runs them in that order and collects ALL errors before raising
+try:
+    patient1 = Patient(**patientinfo)
+    update_patient_info(patient1)
+except ValidationError as e:
+    # e.errors() shows each failed field, the error type, and the message from raise ValueError(...)
+    print(f"Validation Error: {e.errors()}")

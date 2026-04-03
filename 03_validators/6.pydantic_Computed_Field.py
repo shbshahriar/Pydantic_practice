@@ -5,7 +5,7 @@
 
 # computed_field lets you define a field whose value is calculated from other fields
 # It is NOT passed in by the user — pydantic computes it automatically
-from pydantic import BaseModel, EmailStr, AnyUrl, Field, computed_field
+from pydantic import BaseModel, EmailStr, AnyUrl, Field, computed_field, ValidationError
 from typing import List, Dict, Annotated, Optional, Any
 
 class Patient(BaseModel):
@@ -64,5 +64,11 @@ patientinfo: Dict[str, Any] = {
     "contact": {"email": "c7c2A@example.com", "phone": "123-456-7890"}
 }
 
-patient1 = Patient(**patientinfo)
-update_patient_info(patient1)
+# try/except ValidationError — catches type/constraint failures on input fields
+# Note: computed_field (bmi) is never validated as input — it's always derived
+try:
+    patient1 = Patient(**patientinfo)
+    update_patient_info(patient1)
+except ValidationError as e:
+    # e.errors() will describe which field failed and why
+    print(f"Validation Error: {e.errors()}")

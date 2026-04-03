@@ -7,7 +7,7 @@
 from typing_extensions import Self
 
 # model_validator runs validation on the entire model AFTER all fields are validated
-from pydantic import BaseModel, EmailStr, AnyUrl, Field, model_validator
+from pydantic import BaseModel, EmailStr, AnyUrl, Field, model_validator, ValidationError
 from typing import List, Dict, Annotated, Optional, Any
 
 class Patient(BaseModel):
@@ -61,5 +61,11 @@ patientinfo: Dict[str, Any] = {
     "contact": {"email": "c7c2A@example.com", "phone": "123-456-7890"}
 }
 
-patient1 = Patient(**patientinfo)
-update_patient_info(patient1)
+# try/except ValidationError — catches failures from field validation AND model_validator
+# model_validator runs last — after all individual fields pass — so its errors appear here too
+try:
+    patient1 = Patient(**patientinfo)
+    update_patient_info(patient1)
+except ValidationError as e:
+    # e.errors() will show the cross-field error raised inside validate_emergency_contact
+    print(f"Validation Error: {e.errors()}")

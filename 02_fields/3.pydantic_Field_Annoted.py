@@ -6,7 +6,7 @@
 # Field() lets you add constraints (min_length, gt, lt etc.) and metadata (title, description)
 # EmailStr validates proper email format (requires: pip install pydantic[email])
 # AnyUrl validates that the value is a valid URL
-from pydantic import BaseModel, EmailStr, AnyUrl, Field
+from pydantic import BaseModel, EmailStr, AnyUrl, Field, ValidationError
 from typing import List, Dict, Annotated, Optional, Any
 
 class Patient(BaseModel):
@@ -62,6 +62,12 @@ patientinfo: Dict[str, Any] = {
     "contact": {"email": "c7c2A@example.com", "phone": "123-456-7890"}
 }
 
-# ** unpacks the dictionary — pydantic runs all Field constraints and type checks here
-patient1 = Patient(**patientinfo)
-update_patient_info(patient1)
+# try/except ValidationError — catches failures from Field constraints (min_length, gt, lt etc.)
+# and type errors (wrong type passed for a field)
+try:
+    # ** unpacks the dictionary — pydantic runs all Field constraints and type checks here
+    patient1 = Patient(**patientinfo)
+    update_patient_info(patient1)
+except ValidationError as e:
+    # e.errors() gives a detailed list of what failed and why
+    print(f"Validation Error: {e.errors()}")

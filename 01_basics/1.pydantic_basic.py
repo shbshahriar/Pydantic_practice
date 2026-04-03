@@ -3,7 +3,7 @@
 # TOPIC: Pydantic Basics — Defining a simple model and using it
 # ============================================================
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from typing import TypedDict
 
 # TypedDict is a plain Python typing tool — it defines the shape of a dictionary
@@ -37,10 +37,16 @@ patientinfo: PatientInfo = {
     "name": "John Doe",
     "age": 20}
 
-# ** unpacks the dictionary into keyword arguments
-# Equivalent to: patient1 = patient(name="John Doe", age=20)
-# Pydantic validates types here — wrong types would raise a ValidationError
-patient1 = patient(**patientinfo)
-
-# Call update function — changes age to 30 and prints updated info
-update_patient_info(patient1)
+# try/except ValidationError — catches any validation errors pydantic raises
+# ValidationError is raised when a field value fails its type check
+try:
+    # ** unpacks the dictionary into keyword arguments
+    # Equivalent to: patient1 = patient(name="John Doe", age=20)
+    # Pydantic validates types here — wrong types would raise a ValidationError
+    patient1 = patient(**patientinfo)
+    # Call update function — changes age to 30 and prints updated info
+    update_patient_info(patient1)
+except ValidationError as e:
+    # e.errors() returns a list of dicts — each dict describes one validation failure
+    # It tells you: which field failed, what the error message is, and what value was given
+    print(f"Validation Error: {e.errors()}")

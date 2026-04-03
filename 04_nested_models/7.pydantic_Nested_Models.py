@@ -6,7 +6,7 @@
 # Nested models allow you to compose multiple BaseModel classes together
 # This creates a hierarchy where one model contains another model as a field
 # Pydantic automatically validates nested structures recursively
-from pydantic import BaseModel, EmailStr, AnyUrl, Field
+from pydantic import BaseModel, EmailStr, AnyUrl, Field, ValidationError
 from typing import List, Dict, Annotated, Optional, Any
 
 class Address(BaseModel):
@@ -59,5 +59,11 @@ patientinfo: Dict[str, Any] = {
     "address": {"street": "123 Main St", "city": "Anytown", "zip_code": "12345"}
 }
 
-patient1 = Patient(**patientinfo)
-update_patient_info(patient1)
+# try/except ValidationError — pydantic validates nested models recursively
+# So if 'address' dict has a wrong value, the error will point to e.g. address.zip_code
+try:
+    patient1 = Patient(**patientinfo)
+    update_patient_info(patient1)
+except ValidationError as e:
+    # e.errors() includes the full path to nested field errors (e.g. ['address', 'zip_code'])
+    print(f"Validation Error: {e.errors()}")

@@ -3,7 +3,7 @@
 # TOPIC: Using complex types — List and Dict inside a pydantic model
 # ============================================================
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from typing import List, Dict  # List and Dict allow specifying the types inside collections
 
 # Pydantic model with more complex field types
@@ -35,8 +35,12 @@ patientinfo = { # type: ignore
     "contact": {"home": "123 Main St", "work": "456 Business St"}  # dict of strings
 }
 
-# Unpack the dictionary into the pydantic model
-# Pydantic checks: allergies is a List[str]? Dict values are str? etc.
-patient1 = patient(**patientinfo) # type: ignore
-
-update_patient_info(patient1)
+# try/except ValidationError — catches any validation errors pydantic raises
+try:
+    # Unpack the dictionary into the pydantic model
+    # Pydantic checks: allergies is a List[str]? Dict values are str? etc.
+    patient1 = patient(**patientinfo) # type: ignore
+    update_patient_info(patient1)
+except ValidationError as e:
+    # e.errors() returns a list — each item describes one field that failed validation
+    print(f"Validation Error: {e.errors()}")

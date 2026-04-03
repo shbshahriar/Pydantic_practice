@@ -6,7 +6,7 @@
 # model_dump() converts a Pydantic model to a Python dictionary
 # model_dump_json() converts a Pydantic model directly to a JSON string
 # Both methods support include/exclude to control which fields are serialized
-from pydantic import BaseModel, EmailStr, AnyUrl, Field
+from pydantic import BaseModel, EmailStr, AnyUrl, Field, ValidationError
 from typing import List, Dict, Annotated, Optional, Any
 
 class Address(BaseModel):
@@ -58,8 +58,15 @@ patientinfo: Dict[str, Any] = {
     "address": {"street": "123 Main St", "city": "Anytown", "zip_code": "12345"}
 }
 
-patient1 = Patient(**patientinfo)
-update_patient_info(patient1)
+# try/except ValidationError — catches any validation failures before serialization
+# No point serializing a model that failed validation
+try:
+    patient1 = Patient(**patientinfo)
+    update_patient_info(patient1)
+except ValidationError as e:
+    # e.errors() gives a structured list of all validation failures
+    print(f"Validation Error: {e.errors()}")
+    raise SystemExit(1)  # stop the script — no point running serialization on a failed model
 
 # model_dump() converts the model to a Python dictionary
 # include parameter — only serialize specified fields
