@@ -32,7 +32,7 @@ class Patient(BaseModel):
     contact: Annotated[Dict[str, str], Field(title="Patient Contact", description="Contact information for the patient", json_schema_extra={"example": {"email": "c7c2A@example.com", "phone": "123-456-7890"}})]
 
     # address is a nested Address model — pydantic validates it recursively
-    address: Addressmodel
+    address: Address
 
 def update_patient_info(patient: Patient):
     print("Patient information updated successfully.")
