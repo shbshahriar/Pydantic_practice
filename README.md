@@ -23,13 +23,17 @@ Custom validators and computed fields for complex validation logic.
 - **[6.pydantic_Computed_Field.py](03_validators/6.pydantic_Computed_Field.py)** — Auto-calculated fields using `@computed_field`
 
 ### 04_nested_models/ — Nested Model Structures
-*Coming soon* — Validation of nested and complex data structures
+Validation of nested and complex data structures.
+
+- **[7.pydantic_Nested_Models.py](04_nested_models/7.pydantic_Nested_Models.py)** — Composing models within other models for hierarchical data validation
 
 ### 05_settings/ — Configuration Management
 *Coming soon* — Using Pydantic for application settings and configuration
 
 ### 06_serialization/ — Serialization & Export
-*Coming soon* — Converting models to JSON, dictionaries, and other formats
+Converting models to JSON, dictionaries, and other formats.
+
+- **[8.pydantic_Serialization.py](06_serialization/8.pydantic_Serialization.py)** — Model serialization using `model_dump()` and `model_dump_json()`
 
 ### 07_real_world/ — Real-World Examples
 *Coming soon* — Practical applications and use cases
@@ -76,6 +80,7 @@ python -m 01_basics.1_pydantic_basic
 - **Field Validators** — Custom validation logic per field
 - **Model Validators** — Cross-field validation and complex rules
 - **Computed Fields** — Auto-calculated properties derived from other fields
+- **Nested Models** — Composing multiple models together for hierarchical structures
 - **Type Hints** — Leveraging Python's type system for better IDE support
 
 ## 🔧 Technologies
@@ -97,7 +102,7 @@ Each file includes:
 - ✅ 01_basics — Complete (2 files)
 - ✅ 02_fields — Complete (1 file)
 - ✅ 03_validators — Complete (3 files)
-- ⏳ 04_nested_models — Planned
-- ⏳ 05_settings — Planned
-- ⏳ 06_serialization — Planned
+- ✅ 04_nested_models — Complete (1 file)
+- ✅ 05_serialization — Complete (1 file)
+- ⏳ 06_settings — Planned
 - ⏳ 07_real_world — Planned
