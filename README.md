@@ -27,13 +27,15 @@ Validation of nested and complex data structures.
 
 - **[7.pydantic_Nested_Models.py](04_nested_models/7.pydantic_Nested_Models.py)** — Composing models within other models for hierarchical data validation
 
-### 05_settings/ — Configuration Management
-*Coming soon* — Using Pydantic for application settings and configuration
 
-### 06_serialization/ — Serialization & Export
+### 05_serialization/ — Serialization & Export
 Converting models to JSON, dictionaries, and other formats.
 
 - **[8.pydantic_Serialization.py](06_serialization/8.pydantic_Serialization.py)** — Model serialization using `model_dump()` and `model_dump_json()`
+
+### 06_settings/ — Configuration Management
+*Coming soon* — Using Pydantic for application settings and configuration
+
 
 ### 07_real_world/ — Real-World Examples
 *Coming soon* — Practical applications and use cases
