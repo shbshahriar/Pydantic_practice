@@ -1,110 +1,56 @@
 # Pydantic Learning Project
 
-A comprehensive learning repository for mastering **Pydantic** — a data validation and serialization library for Python that uses type hints and provides built-in support for JSON validation, error handling, and model management.
+A learning repository for mastering **Pydantic V2** — runtime data validation and serialization using Python type hints.
 
-## 📚 Project Structure
+## Project Structure
 
 ### 01_basics/ — Pydantic Fundamentals
-Introduction to Pydantic models and basic data validation.
 
-- **[1.pydantic_basic.py](01_basics/1.pydantic_basic.py)** — Basic Pydantic model definition and usage
-- **[2.pydantic_basic_List_Dict.py](01_basics/2.pydantic_basic_List_Dict.py)** — Working with Lists and Dictionaries in Pydantic
+- **[1.pydantic_basic.py](01_basics/1.pydantic_basic.py)** — `BaseModel`, `TypedDict`, field access, `ValidationError`
+- **[2.pydantic_basic_List_Dict.py](01_basics/2.pydantic_basic_List_Dict.py)** — `List[str]`, `Dict[str, str]`, `float`, `bool`
+- **[guide.md](01_basics/guide.md)** — recap
 
 ### 02_fields/ — Field Configuration
-Advanced field configuration with annotations and metadata.
 
-- **[3.pydantic_Field_Annoted.py](02_fields/3.pydantic_Field_Annoted.py)** — Using `Field` with `Annotated` for rich field definitions
+- **[3.pydantic_Field_Annoted.py](02_fields/3.pydantic_Field_Annoted.py)** — `Annotated + Field`, constraints (`gt`, `lt`, `min_length`), `EmailStr`, `AnyUrl`, `Optional`, `json_schema_extra`
+- **[guide.md](02_fields/guide.md)** — recap
 
-### 03_validators/ — Validation & Computed Fields
-Custom validators and computed fields for complex validation logic.
+### 03_validators/ — Validators & Computed Fields
 
-- **[4.pydantic_Field_Validator.py](03_validators/4.pydantic_Field_Validator.py)** — Field-level validators using `@field_validator`
-- **[5.pydantic_Model_Validator.py](03_validators/5.pydantic_Model_Validator.py)** — Model-level validators using `@model_validator` for cross-field validation
-- **[6.pydantic_Computed_Field.py](03_validators/6.pydantic_Computed_Field.py)** — Auto-calculated fields using `@computed_field`
+- **[4.pydantic_Field_Validator.py](03_validators/4.pydantic_Field_Validator.py)** — `@field_validator`, `strict=True`
+- **[5.pydantic_Model_Validator.py](03_validators/5.pydantic_Model_Validator.py)** — `@model_validator`, cross-field rules
+- **[6.pydantic_Computed_Field.py](03_validators/6.pydantic_Computed_Field.py)** — `@computed_field`, auto-calculated BMI
+- **[guide.md](03_validators/guide.md)** — recap
 
-### 04_nested_models/ — Nested Model Structures
-Validation of nested and complex data structures.
+### 04_nested_models/ — Nested Models
 
-- **[7.pydantic_Nested_Models.py](04_nested_models/7.pydantic_Nested_Models.py)** — Composing models within other models for hierarchical data validation
+- **[7.pydantic_Nested_Models.py](04_nested_models/7.pydantic_Nested_Models.py)** — composing models, recursive validation, nested error paths
+- **[guide.md](04_nested_models/guide.md)** — recap
 
+### 05_serialization/ — Serialization
 
-### 05_serialization/ — Serialization & Export
-Converting models to JSON, dictionaries, and other formats.
+- **[8.pydantic_Serialization.py](05_serialization/8.pydantic_Serialization.py)** — `model_dump()`, `model_dump_json()`, `include`, `exclude`
+- **[guide.md](05_serialization/guide.md)** — recap
 
-- **[8.pydantic_Serialization.py](06_serialization/8.pydantic_Serialization.py)** — Model serialization using `model_dump()` and `model_dump_json()`
+## Getting Started
 
-### 06_settings/ — Configuration Management
-*Coming soon* — Using Pydantic for application settings and configuration
-
-
-### 07_real_world/ — Real-World Examples
-*Coming soon* — Practical applications and use cases
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Python 3.9+
-- `uv` (UV package manager)
-
-### Installation
-
-1. Clone/navigate to the project:
 ```bash
-cd pydantic_learn
-```
+# Activate virtual environment (Windows)
+.venv\Scripts\Activate.ps1
 
-2. Activate the virtual environment:
-```bash
-source .venv/bin/activate  # On Windows: .venv\Scripts\Activate.ps1
-```
-
-3. Dependencies are already installed via `uv`. To add more packages:
-```bash
-uv add pydantic
-```
-
-### Running Examples
-
-Run any Python script directly:
-```bash
+# Run any script
 python 01_basics/1.pydantic_basic.py
+
+# Add a package
+uv add <package-name>
 ```
 
-Or execute from the project root:
-```bash
-python -m 01_basics.1_pydantic_basic
-```
+## Key Concepts Covered
 
-## 📖 Key Concepts Covered
-
-- **Data Validation** — Type checking and constraint enforcement
-- **Field Configuration** — Using `Field()` and `Annotated` for metadata
-- **Field Validators** — Custom validation logic per field
-- **Model Validators** — Cross-field validation and complex rules
-- **Computed Fields** — Auto-calculated properties derived from other fields
-- **Nested Models** — Composing multiple models together for hierarchical structures
-- **Type Hints** — Leveraging Python's type system for better IDE support
-
-## 🔧 Technologies
-
-- **[Pydantic](https://docs.pydantic.dev/)** — Data validation using Python type hints
-- **[UV](https://github.com/astral-sh/uv)** — Fast Python package manager
-- **Python 3.9+** — Modern Python with type hints support
-
-## 📝 Notes
-
-Each file includes:
-- Topic header with file description
-- Detailed comments explaining concepts
-- Working examples with actual model definitions
-- Use cases and best practices
-
-## ✨ Progress
-
-- ✅ 01_basics — Complete (2 files)
-- ✅ 02_fields — Complete (1 file)
-- ✅ 03_validators — Complete (3 files)
-- ✅ 04_nested_models — Complete (1 file)
-- ✅ 05_serialization — Complete (1 file)
-- ⏳ 06_settings — Planned
-- ⏳ 07_real_world — Planned
+- `BaseModel` — runtime validated model
+- `Annotated + Field` — constraints and metadata inline with the type
+- `@field_validator` — custom logic on a single field
+- `@model_validator` — cross-field validation
+- `@computed_field` — auto-derived fields
+- Nested models — recursive validation
+- Serialization — `model_dump()` / `model_dump_json()` with `include` / `exclude`
